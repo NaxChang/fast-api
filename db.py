@@ -1,28 +1,35 @@
 import json
-from schema import Book
+from schema import BookOutput
 from typing import List
 
 BOOK_FILE = "book.json"
 
 
 # 讀取
-def load_book() -> List[Book]:
+def load_book() -> List[BookOutput]:
     try:
-        with open(BOOK_FILE, encoding="utf8") as file:
+        with open(BOOK_FILE, "r", encoding="utf8") as file:
             books = json.load(file)
-            return [Book(**book) for book in books]
+            return [BookOutput(**book) for book in books]
     except FileNotFoundError:
         print(f"Error:{BOOK_FILE}was not found")
         return []
     except json.JSONDecodeError:
         print(f"Error:{BOOK_FILE}contains invalid")
         return []
+    except Exception as e:
+        print("Error", e)
+        return []
+
+
+if __name__ == "__main__":
+    loaded_book = load_book()
+    print(loaded_book)
+    print(type(loaded_book))
 
 
 # 寫入
-
-
-def save_book(books: List[Book]) -> None:
+def save_book(books: List[BookOutput]) -> None:
     with open(BOOK_FILE, "w", encoding="utf8") as file:
         json.dump(
             [book.model_dump() for book in books],

@@ -7,7 +7,7 @@ from fastapi import FastAPI, Request, HTTPException, Form
 from db import load_book, save_book, reset_book
 
 # 匯入自己在 db.py 模組中的三個函式
-from schema import Book, BookCreate
+from schema import BookInput, BookOutput
 
 # 匯入 schema.py 裡定義的資料模型：
 from fastapi.templating import Jinja2Templates
@@ -36,7 +36,7 @@ def submit(
     new_id = max_id + 1
     if len(books) >= 10:
         return HTMLResponse(content="limit is 10", status_code=400)
-    new_book = Book(
+    new_book = BookOutput(
         id_=new_id,
         name=name,
         publish=publish,
@@ -58,25 +58,40 @@ def form_page(request: Request):
 
 
 @app.post("/api/books")
-def add_book(book: BookCreate) -> dict:
+def add_book(book: BookInput) -> BookOutput:
     books = load_book()
-    if books:
-        id_list = []
-        for b in books:
-            id_list.append(b.id_)
-        max_id = max(id_list)
-        new_id = max_id + 1
-    else:
-        new_id = 1
-    # 建立新書
-    new_book = Book(id_=new_id, **book.model_dump())
+    new_book = BookOutput(
+        name=book.name,
+        publish=book.publish,
+        type_=book.type_,
+        isbn=book.isbn,
+        price=book.price,
+        id_=len(books) + 1,
+    )
     books.append(new_book)
     save_book(books)
-    return {"message": f"新增成功,id = {new_id}", "id_": new_id}
+    return new_book
 
 
+# books = load_book()
+# if books:
+#     id_list = []
+#     for b in books:
+#         id_list.append(b.id_)
+#     max_id = max(id_list)
+#     new_id = max_id + 1
+# else:
+#     new_id = 1
+# # 建立新書
+# new_book = Book(id_=new_id, **book.model_dump())
+# books.append(new_book)
+# save_book(books)
+# return {"message": f"新增成功,id = {new_id}", "id_": new_id}
+
+
+# 改為BookOutput
 @app.get("/api/books")
-def get_books(type_: str | None = None, id_: int | None = None):
+def get_books(type_: str | None = None, id_: int | None = None) -> list[BookOutput]:
     books = load_book()
     result = books
     if type_:
@@ -86,8 +101,9 @@ def get_books(type_: str | None = None, id_: int | None = None):
     return books
 
 
+# 改為BookOutput
 @app.get("/api/books/{id_}")
-def get_books_id(id_: int) -> Book:
+def get_books_id(id_: int) -> BookOutput:
     books = load_book()
     result = [book for book in books if book.id_ == id_]
     if result:

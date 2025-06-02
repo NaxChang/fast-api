@@ -2,25 +2,23 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class Book(BaseModel):
-    id_: int
+class BookInput(BaseModel):
     name: str
     publish: str
     type_: str
     isbn: Optional[str] = None
     price: Optional[float] = None
 
+    class Config:
+        extra = "forbid"
 
-class BookCreate(BaseModel):
-    name: str
-    publish: str
-    type_: str
-    isbn: str
-    price: float
+
+class BookOutput(BookInput):
+    id_: int
 
 
 if __name__ == "__main__":
-    book = Book(
+    book = BookOutput(
         id_=9,
         name="nameless",
         publish="school",
