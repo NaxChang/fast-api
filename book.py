@@ -1,10 +1,11 @@
 from fastapi import FastAPI, Request, HTTPException, Form
+from collections import OrderedDict
 
 # FastAPI 建立一個 API 應用程式的主入口物件,會用它來定義路由
 # 代表使用者送來的 HTTP 請求
 # 用來回傳 HTTP 錯誤
 # 讓你從 HTML 表單（form）中接收資料，適用於表單格式提交
-from db import load_book, save_book, reset_book
+from db import load_book, save_book, reset_book, init_book
 
 # 匯入自己在 db.py 模組中的三個函式
 from schema import BookInput, BookOutput
@@ -13,7 +14,7 @@ from schema import BookInput, BookOutput
 from fastapi.templating import Jinja2Templates
 
 #  Jinja2 模板系統，FastAPI 可以透過它渲染 HTML 頁面
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 #  回傳內容的格式類型
 
@@ -30,10 +31,11 @@ def submit(
     name: str = Form(...),
     publish: str = Form(...),
     type_: str = Form(...),
+    isbn: str = Form(""),
+    price: float = Form(0.0),
 ):
     books = load_book()
-    max_id = max((b.id_ for b in books), default=0)
-    new_id = max_id + 1
+    new_id = max((b.id_ for b in books), default=0) + 1
     if len(books) >= 10:
         return HTMLResponse(content="limit is 10", status_code=400)
     new_book = BookOutput(
@@ -41,8 +43,8 @@ def submit(
         name=name,
         publish=publish,
         type_=type_,
-        isbn="",
-        price=0.0,
+        isbn=isbn,
+        price=price,
     )
     books.append(new_book)
     save_book(books)
@@ -97,8 +99,21 @@ def get_books(type_: str | None = None, id_: int | None = None) -> list[BookOutp
     if type_:
         result = [book for book in books if book.type_ == type_]
     if id_:
-        return [book for book in result if book.id_ == id_]
-    return books
+        result = [book for book in result if book.id_ == id_]
+    ordered_result = [
+        OrderedDict(
+            [
+                ("id_", book.id_),
+                ("name", book.name),
+                ("publish", book.publish),
+                ("type_", book.type_),
+                ("isbn", book.isbn),
+                ("price", book.price),
+            ]
+        )
+        for book in result
+    ]
+    return JSONResponse(content=ordered_result)
 
 
 # 改為BookOutput
@@ -114,4 +129,10 @@ def get_books_id(id_: int) -> BookOutput:
 @app.post("/api/reset")
 def reset_book_data():
     reset_book()
-    return ["reset ok"]
+    return {"message": "reset ok"}
+
+
+@app.post("/api/init")
+def init_book_data():
+    init_book()
+    return {"message": "init ok"}

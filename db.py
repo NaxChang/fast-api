@@ -46,6 +46,13 @@ def reset_book() -> None:
         print("reset to empty.")
 
 
+# init , 初始化
+def init_book() -> None:
+    with open(BOOK_FILE, "w", encoding="utf8") as file:
+        json.dump(original_books, file, ensure_ascii=False, indent=4)
+        print("init ok.")
+
+
 original_books = [
     {
         "id_": 1,

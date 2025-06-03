@@ -1,82 +1,66 @@
 [
     {
+        "id_": 1,
         "name": "Python超入門",
         "publish": "小白出版社",
         "type_": "python",
         "isbn": "123-00001",
-        "price": 85.0,
-        "id_": 1
+        "price": 85
     },
     {
-        "name": "11",
-        "publish": "name",
-        "type_": "1",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 2
-    },
-    {
-        "name": "11",
-        "publish": "name",
-        "type_": "1",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 3
-    },
-    {
-        "name": "11",
-        "publish": "name",
-        "type_": "1",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 4
-    },
-    {
-        "name": "11",
-        "publish": "name",
+        "id_": 2,
+        "name": "人生苦短用Python",
+        "publish": "快樂程式人",
         "type_": "python",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 5
+        "isbn": "123-00002",
+        "price": 92
     },
     {
-        "name": "11",
-        "publish": "name",
-        "type_": "1",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 6
+        "id_": 3,
+        "name": "資料科學不求人",
+        "publish": "資料人出版社",
+        "type_": "科學",
+        "isbn": "123-00003",
+        "price": 78
     },
     {
-        "name": "11",
-        "publish": "name",
-        "type_": "1",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 7
+        "id_": 4,
+        "name": "機器學習小抄",
+        "publish": "技術宅出版",
+        "type_": "AI",
+        "isbn": "123-00004",
+        "price": 65
     },
     {
-        "name": "11",
-        "publish": "name",
-        "type_": "1",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 8
+        "id_": 5,
+        "name": "AI到底是什麼",
+        "publish": "未來出版社",
+        "type_": "AI",
+        "isbn": "123-00005",
+        "price": 90
     },
     {
-        "name": "11",
-        "publish": "name",
-        "type_": "1",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 9
+        "id_": 6,
+        "name": "數學解密",
+        "publish": "數字出版社",
+        "type_": "數學",
+        "isbn": "123-00006",
+        "price": 88
     },
     {
-        "name": "11",
-        "publish": "name",
-        "type_": "1",
-        "isbn": "",
-        "price": 0.0,
-        "id_": 10
+        "id_": 7,
+        "name": "統計入門",
+        "publish": "數據之家",
+        "type_": "統計",
+        "isbn": "123-00007",
+        "price": 80
+    },
+    {
+        "id_": 8,
+        "name": "演算法圖鑑",
+        "publish": "程式圖書",
+        "type_": "演算法",
+        "isbn": "123-00008",
+        "price": 95
     }
 ]
