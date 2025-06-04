@@ -136,3 +136,15 @@ def reset_book_data():
 def init_book_data():
     init_book()
     return {"message": "init ok"}
+
+
+# delete
+@app.delete("/api/books/{id_}")
+def delete_book(id_: int):
+    books = load_book()
+    matches = [book for book in books if book.id_ == id_]
+    if matches:
+        books.remove(matches[0])
+        save_book(books)
+    else:
+        raise HTTPException(status_code=404, detail=f"no book with id:{id_}")
