@@ -59,22 +59,6 @@ def form_page(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.post("/api/books")
-def add_book(book: BookInput) -> BookOutput:
-    books = load_book()
-    new_book = BookOutput(
-        name=book.name,
-        publish=book.publish,
-        type_=book.type_,
-        isbn=book.isbn,
-        price=book.price,
-        id_=len(books) + 1,
-    )
-    books.append(new_book)
-    save_book(books)
-    return new_book
-
-
 # books = load_book()
 # if books:
 #     id_list = []
@@ -138,8 +122,24 @@ def init_book_data():
     return {"message": "init ok"}
 
 
+@app.post("/api/books")
+def add_book(book: BookInput) -> BookOutput:
+    books = load_book()
+    new_book = BookOutput(
+        name=book.name,
+        publish=book.publish,
+        type_=book.type_,
+        isbn=book.isbn,
+        price=book.price,
+        id_=len(books) + 1,
+    )
+    books.append(new_book)
+    save_book(books)
+    return new_book
+
+
 # delete
-@app.delete("/api/books/{id_}")
+@app.delete("/api/book/{id_}")
 def delete_book(id_: int):
     books = load_book()
     matches = [book for book in books if book.id_ == id_]
@@ -147,4 +147,11 @@ def delete_book(id_: int):
         books.remove(matches[0])
         save_book(books)
     else:
-        raise HTTPException(status_code=404, detail=f"no book with id:{id_}")
+        raise HTTPException(status_code=404, detail=f"no book with id_ = {id_}")
+
+
+#     print(matches)
+#     return matches
+
+
+# delete_book(3)
