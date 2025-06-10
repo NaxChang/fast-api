@@ -5,6 +5,14 @@ from typing import List
 BOOK_FILE = "book.json"
 
 
+# 找出最小缺號
+def find_smallest_missing_id(books):
+    existing_id = sorted(b.id_ for b in books)
+    for i in range(1, len(books) + 2):
+        if i not in existing_id:
+            return i
+
+
 # 讀取
 def load_book() -> List[BookOutput]:
     try:
@@ -60,7 +68,7 @@ original_books = [
         "publish": "小白出版社",
         "type_": "python",
         "isbn": "123-00001",
-        "price": 85,
+        "price": 85.0,
     },
     {
         "id_": 2,
@@ -68,7 +76,7 @@ original_books = [
         "publish": "快樂程式人",
         "type_": "python",
         "isbn": "123-00002",
-        "price": 92,
+        "price": 92.0,
     },
     {
         "id_": 3,
@@ -76,7 +84,7 @@ original_books = [
         "publish": "資料人出版社",
         "type_": "科學",
         "isbn": "123-00003",
-        "price": 78,
+        "price": 78.0,
     },
     {
         "id_": 4,
@@ -84,7 +92,7 @@ original_books = [
         "publish": "技術宅出版",
         "type_": "AI",
         "isbn": "123-00004",
-        "price": 65,
+        "price": 65.0,
     },
     {
         "id_": 5,
@@ -92,7 +100,7 @@ original_books = [
         "publish": "未來出版社",
         "type_": "AI",
         "isbn": "123-00005",
-        "price": 90,
+        "price": 90.0,
     },
     {
         "id_": 6,

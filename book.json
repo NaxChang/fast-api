@@ -8,14 +8,6 @@
         "id_": 1
     },
     {
-        "name": "人生苦短用Python",
-        "publish": "快樂程式人",
-        "type_": "python",
-        "isbn": "123-00002",
-        "price": 92.0,
-        "id_": 2
-    },
-    {
         "name": "資料科學不求人",
         "publish": "資料人出版社",
         "type_": "科學",
@@ -54,5 +46,37 @@
         "isbn": "123-00007",
         "price": 80.0,
         "id_": 7
+    },
+    {
+        "name": "演算法圖鑑",
+        "publish": "程式圖書",
+        "type_": "演算法",
+        "isbn": "123-00008",
+        "price": 95.0,
+        "id_": 8
+    },
+    {
+        "name": "API",
+        "publish": "6",
+        "type_": "6",
+        "isbn": "111",
+        "price": 222.0,
+        "id_": 9
+    },
+    {
+        "name": "API",
+        "publish": "6",
+        "type_": "6",
+        "isbn": "111",
+        "price": 222.0,
+        "id_": 2
+    },
+    {
+        "name": "API",
+        "publish": "6",
+        "type_": "6",
+        "isbn": "111",
+        "price": 10.0,
+        "id_": 10
     }
 ]
