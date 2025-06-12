@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 
@@ -9,12 +9,39 @@ class BookInput(BaseModel):
     isbn: Optional[str] = None
     price: Optional[float] = None
 
-    class Config:
-        extra = "forbid"
+    model_config = {
+        "extra": "forbid",
+        "json_schema_extra": {
+            "example": {
+                "name": "api",
+                "publish": "Fastapi",
+                "type_": "Python",
+                "isbn": "123456",
+                "price": 999,
+            }
+        },
+    }
+
+    # class Config:
+    #     extra = "forbid"
 
 
 class BookOutput(BookInput):
     id_: int
+
+    model_config = {
+        "extra": "forbid",
+        "json_schema_extra": {
+            "example": {
+                "id": 1,
+                "name": "api",
+                "publish": "Fastapi",
+                "type_": "Python",
+                "isbn": "123456",
+                "price": 999,
+            }
+        },
+    }
 
 
 if __name__ == "__main__":
