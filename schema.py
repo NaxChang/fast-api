@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
+
 from typing import Optional
 
 
@@ -7,7 +8,13 @@ class BookInput(BaseModel):
     publish: str
     type_: str
     isbn: Optional[str] = None
-    price: Optional[float] = None
+    price: Optional[float] = Field(default=None, description="價格不能為負數")
+
+    @field_validator("price")
+    def check_price(cls, v):
+        if v is not None and v < 0:
+            raise ValueError("價格不能為負數!")
+        return v
 
     model_config = {
         "extra": "forbid",
@@ -51,7 +58,7 @@ if __name__ == "__main__":
         publish="school",
         type_="python",
         isbn="123-00009",
-        price="999",
+        price=999,
     )
     print(book)
     # print(book.model_dump())
