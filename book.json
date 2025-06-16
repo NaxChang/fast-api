@@ -67,7 +67,7 @@
         "name": "api",
         "publish": "Fastapi",
         "type_": "Python",
-        "isbn": "123456",
+        "isbn": "123-45678",
         "price": 999.0,
         "id_": 9
     }

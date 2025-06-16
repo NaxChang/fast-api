@@ -1,14 +1,20 @@
 from pydantic import BaseModel, Field, field_validator
-
 from typing import Optional
+import re
 
 
 class BookInput(BaseModel):
     name: str
     publish: str
     type_: str
-    isbn: Optional[str] = None
+    isbn: Optional[str] = Field(default=None, description="書號格式必須為123-00006")
     price: Optional[float] = Field(default=None, description="價格不能為負數")
+
+    @field_validator("isbn")
+    def check_isbn(cls, v):
+        if v is not None and not re.match(r"^\d{3}-\d{5}$", v):
+            raise ValueError("isbn書號格式必須為123-00006")
+        return v
 
     @field_validator("price")
     def check_price(cls, v):
