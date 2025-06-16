@@ -8,11 +8,11 @@
         "id_": 1
     },
     {
-        "name": "人生苦短用Python",
-        "publish": "快樂程式人",
-        "type_": "python",
-        "isbn": "123-00002",
-        "price": 92.0,
+        "name": "api",
+        "publish": "Fastapi",
+        "type_": "Python",
+        "isbn": "123-45657",
+        "price": 999.0,
         "id_": 2
     },
     {
