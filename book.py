@@ -7,8 +7,8 @@ from collections import OrderedDict
 # 讓你從 HTML 表單（form）中接收資料，適用於表單格式提交
 from db import load_book, save_book, reset_book, init_book, find_smallest_missing_id
 
-# 匯入自己在 db.py 模組中的三個函式
-from schema import BookInput, BookOutput
+# 匯入自己在 schema.py 模組中的三個函式
+from schema import BookInput, BookOutput, BookPatchInput
 
 # 匯入 schema.py 裡定義的資料模型：
 from fastapi.templating import Jinja2Templates
@@ -24,6 +24,25 @@ templates = Jinja2Templates(directory="templates")
 
 
 app = FastAPI(title="BOOK_API")
+
+
+# patch
+@app.patch("/api/books/{id_}")
+def patch_book(id_: int, update_data: BookPatchInput) -> BookOutput:
+    books = load_book()
+    matches = [book for book in books if book.id_ == id_]
+    if not matches:
+        raise HTTPException(status_code=404, detail=f"no book with id_ = {id_}")
+    book = matches[0]
+    update_dict = update_data.model_dump(exclude_unset=True)
+    for field, value in update_dict.items():
+        setattr(book, field, value)
+    save_book(books)
+    return book
+
+
+# update_data = BookPatchInput(name="Python新書", price=88.8)
+# patch_book(1, update_data)
 
 
 @app.post("/submit", response_class=HTMLResponse)

@@ -39,6 +39,19 @@ class BookInput(BaseModel):
     #     extra = "forbid"
 
 
+class BookPatchInput(BookInput):
+    name: Optional[str] = Field(None, example="python新書")
+    publish: Optional[str] = None
+    type_: Optional[str] = None
+    isbn: Optional[str] = None
+    price: Optional[float] = Field(None, example=88.8)
+
+    model_config = {
+        "extra": "forbid",
+        "json_schema_extra": {"example": {"name": "python新書", "price": 88.8}},
+    }
+
+
 class BookOutput(BookInput):
     id_: int
 

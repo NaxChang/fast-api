@@ -1,10 +1,10 @@
 [
     {
-        "name": "Python超入門",
+        "name": "python",
         "publish": "小白出版社",
         "type_": "python",
         "isbn": "123-00001",
-        "price": 85.0,
+        "price": 99.9,
         "id_": 1
     },
     {
