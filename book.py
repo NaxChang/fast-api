@@ -1,9 +1,14 @@
 from fastapi import FastAPI, Request, HTTPException, Form
 from collections import OrderedDict
 
-# FastAPI 建立一個 API 應用程式的主入口物件,會用它來定義路由
-# 代表使用者送來的 HTTP 請求
-# 用來回傳 HTTP 錯誤
+# 去import模組
+from logger_config import setup_logger
+
+# 引入「非同步上下文管理器」的工具
+
+from contextlib import asynccontextmanager
+
+
 # 讓你從 HTML 表單（form）中接收資料，適用於表單格式提交
 from db import load_book, save_book, reset_book, init_book, find_smallest_missing_id
 
@@ -17,13 +22,25 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, JSONResponse
 
 
-#  回傳內容的格式類型
-
-
 templates = Jinja2Templates(directory="templates")
 
 
-app = FastAPI(title="BOOK_API")
+# logging
+
+logger = setup_logger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info("🚀 FastAPI 啟動")
+    yield
+    logger.info("🛑 FastAPI 關閉")
+
+
+app = FastAPI(
+    title="BOOK_API",
+    lifespan=lifespan,
+)
 
 
 # patch
