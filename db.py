@@ -2,10 +2,11 @@ import json
 from schema import BookOutput
 from typing import List
 
-BOOK_FILE = "book.json"
+BOOK_FILE = "book.json"  # 書籍資料儲存檔案名稱
 
 
 # 找出最小缺號
+# 用於在現有書籍資料中，找到最小的缺少 ID
 def find_smallest_missing_id(books):
     existing_id = sorted(b.id_ for b in books)
     for i in range(1, len(books) + 2):
@@ -13,17 +14,18 @@ def find_smallest_missing_id(books):
             return i
 
 
-# 讀取
+# 讀取書籍資料
+# 從 JSON 檔案讀取書籍資料，並將其轉換為 `BookOutput` 類型的物件
 def load_book() -> List[BookOutput]:
     try:
         with open(BOOK_FILE, "r", encoding="utf8") as file:
             books = json.load(file)
             return [BookOutput(**book) for book in books]
     except FileNotFoundError:
-        print(f"Error:{BOOK_FILE}was not found")
+        print(f"Error: {BOOK_FILE} was not found")
         return []
     except json.JSONDecodeError:
-        print(f"Error:{BOOK_FILE}contains invalid")
+        print(f"Error: {BOOK_FILE} contains invalid JSON")
         return []
     except Exception as e:
         print("Error", e)
@@ -31,12 +33,13 @@ def load_book() -> List[BookOutput]:
 
 
 if __name__ == "__main__":
-    loaded_book = load_book()
-    print(loaded_book)
-    print(type(loaded_book))
+    loaded_book = load_book()  # 測試讀取書籍資料
+    print(loaded_book)  # 印出讀取的書籍資料
+    print(type(loaded_book))  # 印出資料類型
 
 
-# 寫入
+# 寫入書籍資料
+# 將書籍資料儲存回 JSON 檔案
 def save_book(books: List[BookOutput]) -> None:
     with open(BOOK_FILE, "w", encoding="utf8") as file:
         json.dump(
@@ -47,20 +50,23 @@ def save_book(books: List[BookOutput]) -> None:
         )
 
 
-# 重置,清除
+# 重置書籍資料
+# 清除所有書籍資料，將書籍資料檔案重設為空
 def reset_book() -> None:
     with open(BOOK_FILE, "w", encoding="utf8") as file:
         json.dump([], file, ensure_ascii=False, indent=4)
         print("reset to empty.")
 
 
-# init , 初始化
+# 初始化書籍資料
+# 如果沒有書籍資料，則將書籍檔案初始化為預設的書籍資料
 def init_book() -> None:
     with open(BOOK_FILE, "w", encoding="utf8") as file:
         json.dump(original_books, file, ensure_ascii=False, indent=4)
         print("init ok.")
 
 
+# 預設書籍資料
 original_books = [
     {
         "id_": 1,

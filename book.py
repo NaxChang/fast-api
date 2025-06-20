@@ -5,9 +5,7 @@ from collections import OrderedDict
 from logger_config import setup_logger
 
 # 引入「非同步上下文管理器」的工具
-
 from contextlib import asynccontextmanager
-
 
 # 讓你從 HTML 表單（form）中接收資料，適用於表單格式提交
 from db import load_book, save_book, reset_book, init_book, find_smallest_missing_id
@@ -18,18 +16,17 @@ from schema import BookInput, BookOutput, BookPatchInput
 # 匯入 schema.py 裡定義的資料模型：
 from fastapi.templating import Jinja2Templates
 
-#  Jinja2 模板系統，FastAPI 可以透過它渲染 HTML 頁面
+# Jinja2 模板系統，FastAPI 可以透過它渲染 HTML 頁面
 from fastapi.responses import HTMLResponse, JSONResponse
 
-
+# 初始化 Jinja2 模板系統，設置 templates 目錄
 templates = Jinja2Templates(directory="templates")
 
-
-# logging
-
+# 設定日誌紀錄
 logger = setup_logger(__name__)
 
 
+# 非同步上下文管理器來處理 FastAPI 應用的啟動與關閉
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("🚀 FastAPI 啟動")
@@ -37,13 +34,14 @@ async def lifespan(app: FastAPI):
     logger.info("🛑 FastAPI 關閉")
 
 
+# 初始化 FastAPI 應用
 app = FastAPI(
-    title="BOOK_API",
-    lifespan=lifespan,
+    title="BOOK_API",  # API 標題
+    lifespan=lifespan,  # 使用自定義的 lifespan 管理
 )
 
 
-# patch
+# Patch 請求 - 部分更新書籍資料
 @app.patch("/api/books/{id_}")
 def patch_book(id_: int, update_data: BookPatchInput) -> BookOutput:
     books = load_book()
@@ -58,10 +56,7 @@ def patch_book(id_: int, update_data: BookPatchInput) -> BookOutput:
     return book
 
 
-# update_data = BookPatchInput(name="Python新書", price=88.8)
-# patch_book(1, update_data)
-
-
+# 提交表單 - 新增書籍
 @app.post("/submit", response_class=HTMLResponse)
 def submit(
     request: Request,
@@ -72,7 +67,7 @@ def submit(
     price: float = Form(0.0),
 ):
     books = load_book()
-    # new_id = max((b.id_ for b in books), default=0) + 1
+    # 檢查書籍數量限制
     if len(books) >= 10:
         return HTMLResponse(content="limit is 10", status_code=400)
     new_id = find_smallest_missing_id(books)
@@ -92,28 +87,13 @@ def submit(
     )
 
 
+# 回傳書籍新增表單頁面
 @app.get("/", response_class=HTMLResponse)
 def form_page(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-# books = load_book()
-# if books:
-#     id_list = []
-#     for b in books:
-#         id_list.append(b.id_)
-#     max_id = max(id_list)
-#     new_id = max_id + 1
-# else:
-#     new_id = 1
-# # 建立新書
-# new_book = Book(id_=new_id, **book.model_dump())
-# books.append(new_book)
-# save_book(books)
-# return {"message": f"新增成功,id = {new_id}", "id_": new_id}
-
-
-# 改為BookOutput
+# 取得所有書籍資料（可選擇過濾條件）
 @app.get("/api/books")
 def get_books(type_: str | None = None, id_: int | None = None) -> list[BookOutput]:
     books = load_book()
@@ -138,6 +118,7 @@ def get_books(type_: str | None = None, id_: int | None = None) -> list[BookOutp
     return JSONResponse(content=ordered_result)
 
 
+# 新增一本書籍
 @app.post("/api/books")
 def add_book(book: BookInput) -> BookOutput:
     books = load_book()
@@ -157,7 +138,7 @@ def add_book(book: BookInput) -> BookOutput:
     return new_book
 
 
-# 改為BookOutput
+# 根據書籍 ID 查詢單本書籍
 @app.get("/api/books/{id_}")
 def get_books_id(id_: int) -> BookOutput:
     books = load_book()
@@ -167,19 +148,21 @@ def get_books_id(id_: int) -> BookOutput:
     raise HTTPException(status_code=404, detail=f"no book with id_ = {id_}")
 
 
+# 重置書籍資料，清空所有書籍
 @app.post("/api/reset")
 def reset_book_data():
     reset_book()
     return {"message": "reset ok"}
 
 
+# 初始化書籍資料，寫入預設資料
 @app.post("/api/init")
 def init_book_data():
     init_book()
     return {"message": "init ok"}
 
 
-# delete
+# 根據書籍 ID 刪除書籍
 @app.delete("/api/books/{id_}")
 def delete_book(id_: int):
     books = load_book()
@@ -191,7 +174,7 @@ def delete_book(id_: int):
         raise HTTPException(status_code=404, detail=f"no book with id_ = {id_}")
 
 
-# put
+# 根據書籍 ID 完全更新書籍資料
 @app.put("/api/books/{id_}")
 def update_book(id_: int, new_book: BookInput) -> BookOutput:
     books = load_book()
